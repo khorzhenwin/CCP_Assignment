@@ -19,7 +19,7 @@ public class PlaneGenerator implements Runnable {
          planeThread.start();
 
          try {
-            TimeUnit.SECONDS.sleep((long) (Math.random() * 15));
+            TimeUnit.SECONDS.sleep((long) (Math.random() * 10));
          } catch (InterruptedException iex) {
             iex.printStackTrace();
          }

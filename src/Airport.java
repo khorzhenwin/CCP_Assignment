@@ -2,9 +2,12 @@
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Airport {
 
+   public Plane localPlane;
    int maxQueueSize = 6;
    List<Plane> planeQueue;
 
@@ -29,7 +32,6 @@ public class Airport {
    }
 
    void land(DockingGate gate, int gateNo) {
-      Plane plane;
       synchronized (planeQueue) {
          while (planeQueue.size() == 0) {
             System.out.println("ATC: " + "Runway is empty. Waiting for planes.");
@@ -40,27 +42,43 @@ public class Airport {
             }
          }
          System.out.println("ATC: " + ((Plane) ((LinkedList<?>) planeQueue).peekFirst()).getPlaneName() + " is requesting to use the runway");
-         plane = (Plane) ((LinkedList<?>) planeQueue).poll();
+         localPlane = (Plane) ((LinkedList<?>) planeQueue).poll();
       }
 
       // if any gates are open, then allow to land
       long duration = 0;
       try {
-         System.out.println("ATC: " + plane.getPlaneName() + " is currently using the runway.");
+         System.out.println("ATC: " + localPlane.getPlaneName() + " is currently using the runway.");
          duration = (long) (Math.random() * 10);
+         Thread.sleep(duration);
+      } catch (InterruptedException iex) {
+         iex.printStackTrace();
+      }
+      System.out.println("ATC: " + localPlane.getPlaneName() + " has completed using the runway in " + duration + " seconds.");
+      System.out.println("");
+      System.out.println("ATC: " + "RUNWAY IS NOW AVAILABLE");
+      System.out.println("ATC: " + localPlane.getPlaneName() + " please dock at gate " + gateNo);
+      dock(localPlane, gate, gateNo);
+   }
+
+   void depart(DockingGate gate, int gateNo) {
+      long duration = 0;
+      try {
+         System.out.println("ATC: " + localPlane.getPlaneName() + " is now departing from the airport.");
+         duration = (long) (Math.random() * 5);
          TimeUnit.SECONDS.sleep(duration);
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
-      System.out.println("ATC: " + plane.getPlaneName() + " has completed using the runway in " + duration + " seconds.");
-      System.out.println("");
-      System.out.println("ATC: " + "RUNWAY IS NOW AVAILABLE");
-      System.out.println("ATC: " + plane.getPlaneName() + " please dock at gate " + gateNo);
-      dock(plane, gate, gateNo);
+      undock(localPlane, gate, gateNo);
    }
 
    void dock(Plane plane, DockingGate gate, int gateNo) {
-      gate.setOccupied(true);
+      try {
+         gate.dock();
+      } catch (InterruptedException ex) {
+         Logger.getLogger(Airport.class.getName()).log(Level.SEVERE, null, ex);
+      }
       long duration = 5;
       try {
          System.out.println("ATC: " + plane.getPlaneName() + " is currently docking at gate " + gateNo);
@@ -85,6 +103,7 @@ public class Airport {
       System.out.println("ATC: " + plane.getPlaneName() + " is now using the runway to take off.");
       System.out.println("ATC: " + plane.getPlaneName() + " has successfully departed.");
       System.out.println("");
+      gate.undock();
    }
 
 }
