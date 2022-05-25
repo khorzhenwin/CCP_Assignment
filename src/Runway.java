@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  */
 public class Runway implements Runnable {
 
-   Airport ATC;
+   Airport airport;
    DockingGate gate1, gate2;
    public boolean takeOffPriority = false;
 
    public Runway(Airport ATC, DockingGate gate1, DockingGate gate2) {
-      this.ATC = ATC;
+      this.airport = ATC;
       this.gate1 = gate1;
       this.gate2 = gate2;
    }
@@ -34,25 +34,29 @@ public class Runway implements Runnable {
       }
       System.out.println("Runway is now open");
       while (!takeOffPriority) {
-         if (gate1.isOccupied() == false) {
-            gate1.setOccupied(true);
-            ATC.land();
-            System.out.println("Please dock at gate 1");
-            notifyAll();
-         } else if (gate2.isOccupied() == false && gate1.isOccupied()) {
-            gate2.setOccupied(true);
-            ATC.land();
-            System.out.println("Please dock at gate 2");
-            notifyAll();
-         } else {
-            try {
+         try {
+            // if both gates are free, gate 1 will be used as 1st choice
+            if ((!gate1.isOccupied() && gate2.isOccupied()) || (!gate1.isOccupied() && !gate2.isOccupied())) {
+               System.out.println("Gate 1 is available");
+               airport.land(gate1, 1);
+               notifyAll();
+            } else if (gate1.isOccupied() && !gate2.isOccupied()) {
+               System.out.println("Gate 2 is available");
+               airport.land(gate2, 2);
+               notifyAll();
+            } else {
+               System.out.println("All docking gates are currently occupied. Please wait momentarily to land on the runway until a plane departs!");
                wait();
-            } catch (InterruptedException ex) {
-               Logger.getLogger(Runway.class.getName()).log(Level.SEVERE, null, ex);
             }
-         };
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
 
       }
    }
 
+   public synchronized void setTakeOffPriority() {
+      takeOffPriority = true;
+      System.out.println("Plane is trying to depart. Please clear the runway!");
+   }
 }

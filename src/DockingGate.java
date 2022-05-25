@@ -1,5 +1,5 @@
 
-public class DockingGate {
+abstract public class DockingGate {
 
    private boolean occupied = false;
    private Airport ATC;
