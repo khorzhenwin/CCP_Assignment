@@ -13,6 +13,8 @@ public class PassengerGenerator implements Runnable {
    }
 
    public void run() {
+      plane.setPassengerOutCount(randomNum1);
+      plane.setPassengerInCount(randomNum2);
       for (int i = 1; i < randomNum1; i++) {
          Passenger passenger = new Passenger(plane);
          Thread passengerThread = new Thread(passenger);

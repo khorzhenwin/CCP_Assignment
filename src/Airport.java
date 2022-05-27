@@ -18,12 +18,14 @@ public class Airport {
       System.out.println("Thread-" + plane.getPlaneName() + " is requesting to enter the queue to land.");
       synchronized (planeQueue) {
          if (planeQueue.size() == maxQueueSize) {
-            System.out.println("ATC: " + "The queue is currently full." + plane.getPlaneName() + ", please refer to the next nearest airport to avoid running out of fuel.");
+            System.out.println("ATC: " + "The queue is currently full." + plane.getPlaneName()
+                    + ", please refer to the next nearest airport to avoid running out of fuel.");
             System.out.println(plane.getPlaneName() + " left the queue ...");
             return;
          }
          ((LinkedList<Plane>) planeQueue).offer(plane);
          System.out.println("Thread-" + plane.getPlaneName() + " successfully joined the waiting queue to land.");
+         plane.setCurrentTime(System.currentTimeMillis());
          if (planeQueue.size() == 1) {
             planeQueue.notify();
          }
@@ -41,7 +43,8 @@ public class Airport {
                iex.printStackTrace();
             }
          }
-         System.out.println("Thread-" + ((Plane) ((LinkedList<?>) planeQueue).peekFirst()).getPlaneName() + " is requesting to use the runway");
+         System.out.println("Thread-" + ((Plane) ((LinkedList<?>) planeQueue).peekFirst()).getPlaneName()
+                 + " is requesting to use the runway");
          plane = (Plane) ((LinkedList<?>) planeQueue).poll();
       }
 
@@ -59,6 +62,7 @@ public class Airport {
       System.out.println("");
       System.out.println("ATC: " + "RUNWAY IS NOW AVAILABLE");
       dock(plane, gate, gateNo);
+      plane.setLandingTime(System.currentTimeMillis());
       return plane;
    }
 
@@ -84,7 +88,8 @@ public class Airport {
       try {
          System.out.println("ATC: " + plane.getPlaneName() + " is coasting to gate " + gateNo);
          TimeUnit.SECONDS.sleep(duration);
-         System.out.println("Thread-" + plane.getPlaneName() + " has successfully docked at gate " + gateNo + " ,and will now be unboarding passengers.");
+         System.out.println("Thread-" + plane.getPlaneName() + " has successfully docked at gate " + gateNo
+                 + " ,and will now be unboarding passengers.");
 
       } catch (InterruptedException iex) {
          iex.printStackTrace();
@@ -114,7 +119,7 @@ public class Airport {
          System.out.println("ATC: Refuelling truck is attending to " + plane.getPlaneName() + " at gate " + gateNo);
          System.out.println("ATC: Now refuelling " + plane.getPlaneName() + " at gate " + gateNo);
          TimeUnit.SECONDS.sleep(5);
-         System.out.println("ATC: Refuelling completed " + plane.getPlaneName() + " has now left gate " + gateNo);
+         System.out.println("ATC: Refuelling completed for " + plane.getPlaneName() + " has now left gate " + gateNo);
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
