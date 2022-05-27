@@ -1,11 +1,11 @@
 
-public class Passenger implements Runnable {
+public class NewPassenger implements Runnable {
 
    Plane plane;
    int id;
    String passengerName;
 
-   public Passenger(Plane plane) {
+   public NewPassenger(Plane plane) {
       this.plane = plane;
    }
 
@@ -34,7 +34,7 @@ public class Passenger implements Runnable {
    }
 
    public void run() {
-      System.out.println(passengerName + " is now leaving " + plane.planeName);
+      System.out.println(passengerName + " is now boarding " + plane.planeName);
    }
 
 }

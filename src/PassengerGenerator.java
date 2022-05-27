@@ -24,13 +24,26 @@ public class PassengerGenerator implements Runnable {
          Thread passengerThread = new Thread(passenger);
          passenger.setPassengerName("Passenger " + passengerThread.getId());
          passengerThread.start();
-
          try {
             TimeUnit.MILLISECONDS.sleep(100);
          } catch (InterruptedException iex) {
             iex.printStackTrace();
          }
       }
+      System.out.println("All passengers have successfully disembarked from " + plane.getPlaneName());
+      System.out.println("ATC: Passengers may now begin boarding " + plane.getPlaneName());
+      for (int i = 1; i < 51; i++) {
+         NewPassenger newPassenger = new NewPassenger(plane);
+         Thread passengerThread = new Thread(newPassenger);
+         newPassenger.setPassengerName("Passenger " + passengerThread.getId());
+         passengerThread.start();
+         try {
+            TimeUnit.MILLISECONDS.sleep(100);
+         } catch (InterruptedException iex) {
+            iex.printStackTrace();
+         }
+      }
+      System.out.println("All passengers have successfully boarded " + plane.getPlaneName());
       return;
    }
 

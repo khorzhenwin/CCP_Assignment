@@ -19,6 +19,7 @@ public class Runway implements Runnable {
    Plane planeAtGate1, planeAtGate2;
    Airport airport;
    DockingGate gate1, gate2;
+   public volatile boolean passengerThread1Completed, passengerThread2Completed = false;
    public volatile boolean takeOffPriority = false;
    // 1 - plane left gate 1 recently
    // 2 - plane left gate 2 recently
@@ -49,6 +50,7 @@ public class Runway implements Runnable {
                   PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate1);
                   Thread passengerThread = new Thread(passengerGen);
                   passengerThread.start();
+                  passengerThread1Completed = true;
                } else if (gate1.isOccupied() && !gate2.isOccupied()) {
                   System.out.println("ATC: Gate 2 is available");
                   planeAtGate2 = airport.land(gate2, 2);
@@ -56,6 +58,7 @@ public class Runway implements Runnable {
                   PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate2);
                   Thread passengerThread = new Thread(passengerGen);
                   passengerThread.start();
+                  passengerThread2Completed = true;
                } else {
                   System.out.println("ATC: All docking gates are currently occupied. Please wait until a plane departs!");
                   setTakeOffPriority();
@@ -69,12 +72,12 @@ public class Runway implements Runnable {
             // somehow try and make this block wait for passengerThread to finish running
             try {
                Thread.sleep(5000);
-               if (gate1.isOccupied() && (lastToTakeOff == 2 || lastToTakeOff == 0)) {
+               if (gate1.isOccupied() && (lastToTakeOff == 2 || lastToTakeOff == 0) && passengerThread1Completed) {
                   airport.depart(planeAtGate1, gate1, 1);
                   takeOffPriority = false;
                   lastToTakeOff = 1;
                   notifyAll();
-               } else if (gate2.isOccupied() && lastToTakeOff == 1) {
+               } else if (gate2.isOccupied() && lastToTakeOff == 1 && passengerThread2Completed) {
                   airport.depart(planeAtGate2, gate2, 2);
                   takeOffPriority = false;
                   lastToTakeOff = 2;
