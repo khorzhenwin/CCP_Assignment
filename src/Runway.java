@@ -48,16 +48,22 @@ public class Runway implements Runnable {
                   planeAtGate1 = airport.land(gate1, 1);
                   notifyAll();
                   PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate1);
+                  Cleaner cleaner = new Cleaner(planeAtGate1);
                   Thread passengerThread = new Thread(passengerGen);
+                  Thread cleanerThread = new Thread(cleaner);
                   passengerThread.start();
+                  cleanerThread.start();
                   passengerThread1Completed = true;
                } else if (gate1.isOccupied() && !gate2.isOccupied()) {
                   System.out.println("ATC: Gate 2 is available");
                   planeAtGate2 = airport.land(gate2, 2);
                   notifyAll();
                   PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate2);
+                  Cleaner cleaner = new Cleaner(planeAtGate2);
                   Thread passengerThread = new Thread(passengerGen);
+                  Thread cleanerThread = new Thread(cleaner);
                   passengerThread.start();
+                  cleanerThread.start();
                   passengerThread2Completed = true;
                } else {
                   System.out.println("ATC: All docking gates are currently occupied. Please wait until a plane departs!");
