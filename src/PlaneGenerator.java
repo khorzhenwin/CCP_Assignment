@@ -13,7 +13,6 @@ public class PlaneGenerator implements Runnable {
    public void run() {
       while (!closed) {
          Plane plane = new Plane(airport);
-         plane.setInQueue(true);
          Thread planeThread = new Thread(plane);
          plane.setPlaneName("Plane " + planeThread.getId());
          planeThread.start();
@@ -29,7 +28,6 @@ public class PlaneGenerator implements Runnable {
             Thread.sleep(5000);
             System.out.println("Clearing queue before closing airport");
             Plane plane = new Plane(airport);
-            plane.setInQueue(true);
             Thread planeThread = new Thread(plane);
             plane.setPlaneName("Plane " + planeThread.getId());
             planeThread.start();

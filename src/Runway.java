@@ -46,10 +46,16 @@ public class Runway implements Runnable {
                   System.out.println("ATC: Gate 1 is available");
                   planeAtGate1 = airport.land(gate1, 1);
                   notifyAll();
+                  PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate1);
+                  Thread passengerThread = new Thread(passengerGen);
+                  passengerThread.start();
                } else if (gate1.isOccupied() && !gate2.isOccupied()) {
                   System.out.println("ATC: Gate 2 is available");
                   planeAtGate2 = airport.land(gate2, 2);
                   notifyAll();
+                  PassengerGenerator passengerGen = new PassengerGenerator(planeAtGate2);
+                  Thread passengerThread = new Thread(passengerGen);
+                  passengerThread.start();
                } else {
                   System.out.println("ATC: All docking gates are currently occupied. Please wait until a plane departs!");
                   setTakeOffPriority();
@@ -60,6 +66,7 @@ public class Runway implements Runnable {
             }
          }
          while (takeOffPriority) {
+            // somehow try and make this block wait for passengerThread to finish running
             try {
                Thread.sleep(5000);
                if (gate1.isOccupied() && (lastToTakeOff == 2 || lastToTakeOff == 0)) {

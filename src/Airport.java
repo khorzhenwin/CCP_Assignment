@@ -84,8 +84,8 @@ public class Airport {
       try {
          System.out.println("ATC: " + plane.getPlaneName() + " is currently docking at gate " + gateNo);
          TimeUnit.SECONDS.sleep(duration);
-         System.out.println("ATC: " + plane.getPlaneName() + " has successfully docked at gate " + gateNo + " ,and will now be unboarding passengers.");
-         // insert unboarding stuff here
+         System.out.println(plane.getPlaneName() + " has successfully docked at gate " + gateNo + " ,and will now be unboarding passengers.");
+
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
