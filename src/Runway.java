@@ -1,19 +1,6 @@
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.Semaphore;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author user
- */
 public class Runway implements Runnable {
 
    Plane planeAtGate1, planeAtGate2;
@@ -21,8 +8,6 @@ public class Runway implements Runnable {
    DockingGate gate1, gate2;
    public volatile boolean passengerThread1Completed, passengerThread2Completed = false;
    public volatile boolean takeOffPriority = false;
-   // 1 - plane left gate 1 recently
-   // 2 - plane left gate 2 recently
    public volatile int lastToTakeOff = 0;
    boolean run = true;
 
@@ -33,6 +18,7 @@ public class Runway implements Runnable {
    }
 
    public synchronized void run() {
+      Semaphore sm = new Semaphore(1);
       try {
          Thread.sleep(1000);
       } catch (InterruptedException iex) {
@@ -53,7 +39,10 @@ public class Runway implements Runnable {
                   Thread cleanerThread = new Thread(cleaner);
                   passengerThread.start();
                   cleanerThread.start();
+                  sm.acquire();
+                  airport.refuel(planeAtGate1, gate1, 1);
                   passengerThread1Completed = true;
+                  sm.release();
                } else if (gate1.isOccupied() && !gate2.isOccupied()) {
                   System.out.println("ATC: Gate 2 is available");
                   planeAtGate2 = airport.land(gate2, 2);
@@ -64,7 +53,10 @@ public class Runway implements Runnable {
                   Thread cleanerThread = new Thread(cleaner);
                   passengerThread.start();
                   cleanerThread.start();
+                  sm.acquire();
+                  airport.refuel(planeAtGate2, gate2, 2);
                   passengerThread2Completed = true;
+                  sm.release();
                } else {
                   System.out.println("ATC: All docking gates are currently occupied. Please wait until a plane departs!");
                   setTakeOffPriority();
@@ -98,6 +90,6 @@ public class Runway implements Runnable {
 
    public synchronized void setTakeOffPriority() {
       takeOffPriority = true;
-      System.out.println("Blocking the runway until a plane is ready to leave.");
+      System.out.println("ATC: Blocking the runway until a plane is ready to leave.");
    }
 }
