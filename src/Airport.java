@@ -107,7 +107,7 @@ public class Airport {
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
-      System.out.println("Thread-" + plane.getPlaneName() + " is now coasting to the runway to depart " + gateNo);
+      System.out.println("Thread-" + plane.getPlaneName() + " is now coasting to the runway to depart from " + gateNo);
       System.out.println("Thread-" + plane.getPlaneName() + " is now using the runway to take off.");
       System.out.println(plane.getPlaneName() + " has successfully departed.");
       System.out.println("");

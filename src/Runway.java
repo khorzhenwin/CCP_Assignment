@@ -87,7 +87,7 @@ public class Runway implements Runnable {
                   airport.depart(planeAtGate2, gate2, 2);
                   takeOffPriority = false;
                   lastToTakeOff = 2;
-                  Report newReport = new Report(planeAtGate1.getPlaneName(), planeAtGate1.getPassengerInCount(), planeAtGate1.passengerOutCount, planeAtGate1.getLandingTime() - planeAtGate1.getCurrentTime());
+                  Report newReport = new Report(planeAtGate2.getPlaneName(), planeAtGate2.getPassengerInCount(), planeAtGate2.passengerOutCount, planeAtGate2.getLandingTime() - planeAtGate2.getCurrentTime());
                   allReports.add(newReport);
                   notifyAll();
                }
@@ -95,7 +95,7 @@ public class Runway implements Runnable {
                System.out.println("Exception:" + e);
             }
          }
-         if (allReports.size() == 3) {
+         if (allReports.size() == 6) {
             run = false;
             planeGen.setClosing();
          }
@@ -105,7 +105,7 @@ public class Runway implements Runnable {
          System.out.println("Plane : " + allReports.get(i).getPlaneName());
          System.out.println("Total Passengers Disembarked : " + allReports.get(i).getPassengerOutCount());
          System.out.println("Total Passengers Embarked : " + allReports.get(i).getPassengerInCount());
-         System.out.println("Total Wait Time To Land : " + allReports.get(i).getLandingWaitingTime());
+         System.out.println("Total Waiting Time To Land : " + allReports.get(i).getLandingWaitingTime() + " ms");
          System.out.println("----------------------------------------------------------------------------------------------------------");
       }
    }
