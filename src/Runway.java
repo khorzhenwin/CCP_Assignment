@@ -1,6 +1,9 @@
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Runway implements Runnable {
 
@@ -53,7 +56,7 @@ public class Runway implements Runnable {
          while (!takeOffPriority) {
             try {
                // if both gates are free, gate 1 will be used as 1st choice
-               if ((!gate1.isOccupied() && gate2.isOccupied()) || (!gate1.isOccupied() && !gate2.isOccupied())) {
+               if (airport.planeQueue.size() > 0 && ((!gate1.isOccupied() && gate2.isOccupied()) || (!gate1.isOccupied() && !gate2.isOccupied()))) {
                   System.out.println("ATC: Gate 1 is available");
                   planeAtGate1 = airport.land(gate1, 1);
                   notifyAll();
@@ -68,7 +71,12 @@ public class Runway implements Runnable {
                   passengerThread1Completed = true;
                   sm.release();
                   notifyAll();
-               } else if (gate1.isOccupied() && !gate2.isOccupied()) {
+                  // clearing gates when no more planes are coming in
+                  if (!planeThread.isAlive() && (gate1.isOccupied() || gate2.isOccupied())) {
+                     takeOffPriority = true;
+                     notifyAll();
+                  }
+               } else if (airport.planeQueue.size() > 0 && (gate1.isOccupied() && !gate2.isOccupied())) {
                   System.out.println("ATC: Gate 2 is available");
                   planeAtGate2 = airport.land(gate2, 2);
                   notifyAll();
@@ -83,6 +91,14 @@ public class Runway implements Runnable {
                   passengerThread2Completed = true;
                   sm.release();
                   notifyAll();
+                  // clearing gates when no more planes are coming in
+                  if (!planeThread.isAlive() && (gate1.isOccupied() || gate2.isOccupied())) {
+                     takeOffPriority = true;
+                     notifyAll();
+                  }
+               } else if (airport.planeQueue.size() == 0) {
+                  takeOffPriority = true;
+                  run = false;
                } else {
                   System.out.println("ATC: All docking gates are currently occupied. Please wait until a plane departs!");
                   setTakeOffPriority();
@@ -93,7 +109,6 @@ public class Runway implements Runnable {
             }
          }
          while (takeOffPriority) {
-            // somehow try and make this block run when passengerThread finish running
             try {
                if (gate1.isOccupied() && (lastToTakeOff == 2 || lastToTakeOff == 0) && passengerThread1Completed) {
                   airport.depart(planeAtGate1, gate1, 1);
@@ -117,14 +132,25 @@ public class Runway implements Runnable {
                           planeAtGate2.getDepartureTime() - planeAtGate2.getLandingTime());
                   allReports.add(newReport);
                   notifyAll();
+               } else if (airport.planeQueue.size() == 0) {
+                  run = false;
                }
             } catch (Exception e) {
                System.out.println("Exception:" + e);
             }
          }
-         if (allReports.size() == 6) {
+         // sanity check
+         if (airport.planeQueue.size() == 0 && !gate1.isOccupied() && !gate2.isOccupied()) {
+            System.out.println(ANSI_PURPLE + " Both gates are empty. Waiting for more planes ..." + ANSI_RESET);
+            try {
+               TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException ex) {
+               Logger.getLogger(Runway.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(ANSI_PURPLE + " There are no more planes for now" + ANSI_RESET);
+            System.out.println(ANSI_PURPLE + " Printing out summary statistics ..." + ANSI_RESET);
             run = false;
-            planeGen.setClosing();
+            break;
          }
       }
       for (int i = 0; i < allReports.size(); i++) {

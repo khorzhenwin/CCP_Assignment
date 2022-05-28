@@ -42,9 +42,9 @@ public class Cleaner implements Runnable {
          TimeUnit.SECONDS.sleep(1);
          System.out.println(Main.ANSI_BLUE_BACKGROUND + "ATC: Cleaning crew will now begin refilling supplies for " + plane.getPlaneName() + Main.ANSI_RESET);
          TimeUnit.SECONDS.sleep(2);
-         System.out.println(Main.ANSI_BLUE_BACKGROUND + "------------------------------Refilling supplies for " + plane.getPlaneName() + "------------------------------" + Main.ANSI_RESET);
+         System.out.println(Main.ANSI_BLUE_BACKGROUND + "------------------------------ Refilling supplies for " + plane.getPlaneName() + " ------------------------------" + Main.ANSI_RESET);
          TimeUnit.SECONDS.sleep(2);
-         System.out.println(Main.ANSI_BLUE_BACKGROUND + "------------------------------Cleaning aircraft for " + plane.getPlaneName() + "------------------------------" + Main.ANSI_RESET);
+         System.out.println(Main.ANSI_BLUE_BACKGROUND + "------------------------------ Cleaning aircraft for " + plane.getPlaneName() + " ------------------------------" + Main.ANSI_RESET);
          TimeUnit.SECONDS.sleep(2);
          System.out.println(Main.ANSI_BLUE_BACKGROUND + "ATC: Cleaning crew is done cleaning " + plane.getPlaneName() + Main.ANSI_RESET);
          System.out.println(Main.ANSI_BLUE_BACKGROUND + "Cleaning crew is leaving " + plane.getPlaneName() + "..." + Main.ANSI_RESET);
