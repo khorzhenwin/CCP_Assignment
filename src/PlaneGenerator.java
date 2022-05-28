@@ -26,7 +26,7 @@ public class PlaneGenerator implements Runnable {
       if (closed) {
          try {
             Thread.sleep(5000);
-            System.out.println("Clearing queue before closing airport");
+            System.out.println("Clearing queue ...");
             Plane plane = new Plane(airport);
             Thread planeThread = new Thread(plane);
             plane.setPlaneName("Plane " + planeThread.getId());
@@ -41,6 +41,6 @@ public class PlaneGenerator implements Runnable {
 
    public synchronized void setClosing() {
       closed = true;
-      System.out.println("Airport is closing soon");
+      System.out.println("Printing report for the past 6 planes ...");
    }
 }

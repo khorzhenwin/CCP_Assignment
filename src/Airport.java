@@ -24,7 +24,7 @@ public class Airport {
             return;
          }
          ((LinkedList<Plane>) planeQueue).offer(plane);
-         System.out.println("Thread-" + plane.getPlaneName() + " successfully joined the waiting queue to land.");
+         System.out.println(Main.ANSI_YELLOW + "Thread-" + plane.getPlaneName() + " successfully joined the waiting queue to land." + Main.ANSI_RESET);
          plane.setCurrentTime(System.currentTimeMillis());
          if (planeQueue.size() == 1) {
             planeQueue.notify();
@@ -69,7 +69,7 @@ public class Airport {
    void depart(Plane localPlane, DockingGate gate, int gateNo) {
       long duration = 0;
       try {
-         System.out.println("Thread-" + localPlane.getPlaneName() + " is now departing from the airport.");
+         System.out.println(Main.ANSI_GREEN_BACKGROUND + Main.ANSI_BLUE + "Thread-" + localPlane.getPlaneName() + " is now departing from the airport." + Main.ANSI_RESET);
          duration = (long) (Math.random() * 5);
          TimeUnit.SECONDS.sleep(duration);
       } catch (InterruptedException iex) {
@@ -99,31 +99,31 @@ public class Airport {
    }
 
    void undock(Plane plane, DockingGate gate, int gateNo) {
-      long duration = 5;
       try {
-         System.out.println("Thread-" + plane.getPlaneName() + " is currently undocking from gate " + gateNo);
-         TimeUnit.SECONDS.sleep(duration);
-         System.out.println("Thread-" + plane.getPlaneName() + " has now left gate " + gateNo);
+         System.out.println(Main.ANSI_GREEN + "Thread-" + plane.getPlaneName() + " is currently undocking from gate " + gateNo + Main.ANSI_RESET);
+         TimeUnit.SECONDS.sleep(2);
+         System.out.println(Main.ANSI_GREEN + "Thread-" + plane.getPlaneName() + " has now left gate " + gateNo + Main.ANSI_RESET);
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
-      System.out.println("Thread-" + plane.getPlaneName() + " is now coasting to the runway to depart from " + gateNo);
-      System.out.println("Thread-" + plane.getPlaneName() + " is now using the runway to take off.");
-      System.out.println(plane.getPlaneName() + " has successfully departed.");
+      System.out.println(Main.ANSI_GREEN + "Thread-" + plane.getPlaneName() + " is now coasting to the runway to depart from " + gateNo + Main.ANSI_RESET);
+      System.out.println(Main.ANSI_GREEN + "Thread-" + plane.getPlaneName() + " is now using the runway to take off." + Main.ANSI_RESET);
+      System.out.println(Main.ANSI_GREEN + plane.getPlaneName() + " has successfully departed." + Main.ANSI_RESET);
+      plane.setDepartureTime(System.currentTimeMillis());
       System.out.println("");
       gate.undock();
    }
 
    void refuel(Plane plane, DockingGate gate, int gateNo) {
       try {
-         System.out.println("ATC: Refuelling truck is attending to " + plane.getPlaneName() + " at gate " + gateNo);
-         System.out.println("ATC: Now refuelling " + plane.getPlaneName() + " at gate " + gateNo);
+         System.out.println(Main.ANSI_PURPLE_BACKGROUND + Main.ANSI_WHITE + "ATC: Refuelling truck is attending to " + plane.getPlaneName() + " at gate " + gateNo + Main.ANSI_RESET);
+         System.out.println(Main.ANSI_PURPLE_BACKGROUND + Main.ANSI_WHITE + "ATC: Now refuelling " + plane.getPlaneName() + " at gate " + gateNo + Main.ANSI_RESET);
          TimeUnit.SECONDS.sleep(5);
-         System.out.println("ATC: Refuelling completed for " + plane.getPlaneName() + " has now left gate " + gateNo);
+         System.out.println(Main.ANSI_PURPLE_BACKGROUND + Main.ANSI_WHITE + "ATC: Refuelling completed for " + plane.getPlaneName() + " , refuelling truck is now leaving gate " + gateNo + Main.ANSI_RESET);
       } catch (InterruptedException iex) {
          iex.printStackTrace();
       }
-      System.out.println("ATC: Refuelling truck is now available");
+      System.out.println(Main.ANSI_PURPLE_BACKGROUND + Main.ANSI_WHITE + "ATC: Refuelling truck is now available" + Main.ANSI_RESET);
    }
 
 }

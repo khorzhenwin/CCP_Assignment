@@ -3,13 +3,14 @@ public class Report {
 
    private String planeName;
    private int passengerInCount, passengerOutCount;
-   private double landingWaitingTime;
+   private long landingWaitingTime, totalTime;
 
-   public Report(String planeName, int passengerInCount, int passengerOutCount, double landingWaitingTime) {
+   public Report(String planeName, int passengerInCount, int passengerOutCount, long landingWaitingTime, long totalTime) {
       this.planeName = planeName;
       this.passengerInCount = passengerInCount;
       this.passengerOutCount = passengerOutCount;
       this.landingWaitingTime = landingWaitingTime;
+      this.totalTime = totalTime;
    }
 
    public String getPlaneName() {
@@ -36,12 +37,20 @@ public class Report {
       this.passengerOutCount = passengerOutCount;
    }
 
-   public double getLandingWaitingTime() {
+   public long getLandingWaitingTime() {
       return landingWaitingTime;
    }
 
-   public void setLandingWaitingTime(double landingWaitingTime) {
+   public void setLandingWaitingTime(int landingWaitingTime) {
       this.landingWaitingTime = landingWaitingTime;
+   }
+
+   public long getTotalTime() {
+      return totalTime;
+   }
+
+   public void setTotalTime(int totalTime) {
+      this.totalTime = totalTime;
    }
 
 }

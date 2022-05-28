@@ -26,8 +26,8 @@ public class PassengerGenerator implements Runnable {
             iex.printStackTrace();
          }
       }
-      System.out.println("All " + randomNum1 + " passengers have successfully disembarked from " + plane.getPlaneName());
-      System.out.println("ATC: Passengers may now begin boarding " + plane.getPlaneName());
+      System.out.println(Main.ANSI_CYAN + "All " + randomNum1 + " passengers have successfully disembarked from " + plane.getPlaneName() + Main.ANSI_RESET);
+      System.out.println(Main.ANSI_CYAN + "ATC: Passengers may now begin boarding " + plane.getPlaneName());
       for (int i = 1; i < randomNum2; i++) {
          NewPassenger newPassenger = new NewPassenger(plane);
          Thread passengerThread = new Thread(newPassenger);
@@ -39,7 +39,8 @@ public class PassengerGenerator implements Runnable {
             iex.printStackTrace();
          }
       }
-      System.out.println("All " + randomNum2 + " passengers have successfully boarded " + plane.getPlaneName());
+      System.out.println(Main.ANSI_CYAN + "All " + randomNum2 + " passengers have successfully boarded " + plane.getPlaneName() + Main.ANSI_RESET);
+      System.out.println(Main.ANSI_CYAN + plane.getPlaneName() + " is waiting for clearance from ATC for departure" + Main.ANSI_RESET);
       return;
    }
 

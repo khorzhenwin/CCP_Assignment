@@ -4,7 +4,7 @@ public class Plane implements Runnable {
    Airport airport;
    int id;
    String planeName;
-   long currentTime, landingTime;
+   long currentTime, landingTime, departureTime;
    int passengerOutCount, passengerInCount;
 
    public Plane(Airport airport) {
@@ -65,6 +65,14 @@ public class Plane implements Runnable {
 
    public void setPassengerInCount(int passengerInCount) {
       this.passengerInCount = passengerInCount;
+   }
+
+   public long getDepartureTime() {
+      return departureTime;
+   }
+
+   public void setDepartureTime(long departureTime) {
+      this.departureTime = departureTime;
    }
 
    @Override
