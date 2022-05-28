@@ -153,6 +153,8 @@ public class Runway implements Runnable {
             break;
          }
       }
+      long maxWait = 0, avgWait = 0, minWait = 999999;
+      long maxGroundTime = 0, avgGroundTime = 0, minGroundTime = 999999;
       for (int i = 0; i < allReports.size(); i++) {
          System.out.println("----------------------------------------------------------------------------------------------------------");
          System.out.println("Plane : " + allReports.get(i).getPlaneName());
@@ -161,7 +163,20 @@ public class Runway implements Runnable {
          System.out.println("Total Waiting Time To Land : " + allReports.get(i).getLandingWaitingTime() + " ms");
          System.out.println("Total Time Spent At Airport : " + allReports.get(i).getTotalTime() + " ms");
          System.out.println("----------------------------------------------------------------------------------------------------------");
+         maxWait = (maxWait < allReports.get(i).getLandingWaitingTime()) ? allReports.get(i).getLandingWaitingTime() : maxWait;
+         minWait = (allReports.get(i).getLandingWaitingTime() < minWait) ? allReports.get(i).getLandingWaitingTime() : minWait;
+         avgWait += allReports.get(i).getLandingWaitingTime();
+         maxGroundTime = (maxGroundTime < allReports.get(i).getTotalTime()) ? allReports.get(i).getTotalTime() : maxGroundTime;
+         minGroundTime = (allReports.get(i).getTotalTime() < minGroundTime) ? allReports.get(i).getTotalTime() : minGroundTime;
+         avgGroundTime += allReports.get(i).getTotalTime();
       }
+      System.out.println(ANSI_PURPLE + "Minimum Wait Time: " + minWait + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Maximum Wait Time: " + maxWait + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Average Wait Time: " + avgWait / allReports.size() + ANSI_RESET);
+      System.out.println(ANSI_CYAN + "----------------------------------------------------------------------------------------" + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Minimum Ground Time: " + minGroundTime + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Maximum Ground Time: " + maxGroundTime + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Average Ground Time: " + avgGroundTime / allReports.size() + ANSI_RESET);
    }
 
    public synchronized void setTakeOffPriority() {
