@@ -170,13 +170,13 @@ public class Runway implements Runnable {
          minGroundTime = (allReports.get(i).getTotalTime() < minGroundTime) ? allReports.get(i).getTotalTime() : minGroundTime;
          avgGroundTime += allReports.get(i).getTotalTime();
       }
-      System.out.println(ANSI_PURPLE + "Minimum Wait Time: " + minWait + ANSI_RESET);
-      System.out.println(ANSI_PURPLE + "Maximum Wait Time: " + maxWait + ANSI_RESET);
-      System.out.println(ANSI_PURPLE + "Average Wait Time: " + avgWait / allReports.size() + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Minimum Wait Time: " + minWait + "ms" + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Maximum Wait Time: " + maxWait + "ms" + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Average Wait Time: " + avgWait / allReports.size() + "ms" + ANSI_RESET);
       System.out.println(ANSI_CYAN + "----------------------------------------------------------------------------------------" + ANSI_RESET);
-      System.out.println(ANSI_PURPLE + "Minimum Ground Time: " + minGroundTime + ANSI_RESET);
-      System.out.println(ANSI_PURPLE + "Maximum Ground Time: " + maxGroundTime + ANSI_RESET);
-      System.out.println(ANSI_PURPLE + "Average Ground Time: " + avgGroundTime / allReports.size() + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Minimum Ground Time: " + minGroundTime + "ms" + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Maximum Ground Time: " + maxGroundTime + "ms" + ANSI_RESET);
+      System.out.println(ANSI_PURPLE + "Average Ground Time: " + avgGroundTime / allReports.size() + "ms" + ANSI_RESET);
    }
 
    public synchronized void setTakeOffPriority() {
